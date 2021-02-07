@@ -4,11 +4,8 @@
 
 INSTALLPATH="/storage/roms/ports"
 PKG_NAME="cannonball"
-PKG_FILE="351ELEC-Packages-cannonball.zip"
 PKG_VERSION="1.0"
-PKG_SHASUM=""
 SOURCEPATH=$(pwd)
-
 
 
 ### Test and make the full path if necessary.
@@ -16,20 +13,6 @@ if [ ! -d "${INSTALLPATH}/${PKG_NAME}" ]
 then
   mkdir -p "${INSTALLPATH}/${PKG_NAME}"
 fi
-
-cd ${INSTALLPATH}/${PKG_NAME}
-
-curl -Lo ${PKG_FILE} https://github.com/anthonycaccese/351ELEC-Packages/releases/download/${PKG_VERSION}/${PKG_FILE}
-BINSUM=$(sha256sum ${PKG_FILE} | awk '{print $1}')
-if [ ! "${PKG_SHASUM}" == "${BINSUM}" ]
-then
-  echo "Checksum mismatch, please update the package."
-  exit 1
-fi
-
-unzip -o ${PKG_FILE}
-rm ${PKG_FILE}
-
 
 
 ### Create the start script
@@ -43,9 +26,7 @@ ret_error=$?
 [[ "$ret_error" != 0 ]] && ee_check_bios "Cannonball"
 
 exit $ret_error
-
 EOF
-
 
 
 ### Add images if they are missing
@@ -60,7 +41,6 @@ do
 done
 
 
-
 ### Add video if its missing
 if [ ! -d "${INSTALLPATH}/videos" ]
 then
@@ -71,7 +51,6 @@ for video in system-cannonball.mp4
 do
   cp "${SOURCEPATH}/${PKG_NAME}/${video}" "${INSTALLPATH}/videos"
 done
-
 
 
 ### Add cannonball to the game list
